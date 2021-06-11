@@ -1,7 +1,7 @@
 pragma solidity =0.5.16;
 
 import './interfaces/IAppleERC20.sol';
-import '../../periphery/SafeMath.sol';
+import './libraries/SafeMath.sol';
 
 contract AppleERC20 is IAppleERC20 {
     using SafeMath for uint;
