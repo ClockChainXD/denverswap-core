@@ -1,13 +1,13 @@
 pragma solidity =0.5.16;
 
-import './interfaces/IAppleERC20.sol';
+import './interfaces/IDenverERC20.sol';
 import './libraries/SafeMath.sol';
 
-contract AppleERC20 is IAppleERC20 {
+contract DenverERC20 is IDenverERC20 {
     using SafeMath for uint;
 
-    string public constant name = 'Apple LPs';
-    string public constant symbol = 'App-LP';
+    string public constant name = 'Denver LPs';
+    string public constant symbol = 'DNR-LP';
     uint8 public constant decimals = 18;
     uint  public totalSupply;
     mapping(address => uint) public balanceOf;
@@ -79,7 +79,7 @@ contract AppleERC20 is IAppleERC20 {
     }
 
     function permit(address owner, address spender, uint value, uint deadline, uint8 v, bytes32 r, bytes32 s) external {
-        require(deadline >= block.timestamp, 'Apple: EXPIRED');
+        require(deadline >= block.timestamp, 'Denver: EXPIRED');
         bytes32 digest = keccak256(
             abi.encodePacked(
                 '\x19\x01',
@@ -88,7 +88,7 @@ contract AppleERC20 is IAppleERC20 {
             )
         );
         address recoveredAddress = ecrecover(digest, v, r, s);
-        require(recoveredAddress != address(0) && recoveredAddress == owner, 'Apple: INVALID_SIGNATURE');
+        require(recoveredAddress != address(0) && recoveredAddress == owner, 'Denver: INVALID_SIGNATURE');
         _approve(owner, spender, value);
     }
 }

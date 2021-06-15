@@ -1,10 +1,10 @@
 pragma solidity =0.5.16;
 
-import './interfaces/IAppleFactory.sol';
-import './ApplePair.sol';
+import './interfaces/IDenverFactory.sol';
+import './DenverPair.sol';
 
-contract AppleFactory is IAppleFactory {
-    bytes32 public constant INIT_CODE_PAIR_HASH = keccak256(abi.encodePacked(type(ApplePair).creationCode));
+contract DenverFactory is IDenverFactory {
+    bytes32 public constant INIT_CODE_PAIR_HASH = keccak256(abi.encodePacked(type(DenverPair).creationCode));
 
     address public feeTo;
     address public feeToSetter;
@@ -23,16 +23,16 @@ contract AppleFactory is IAppleFactory {
     }
 
     function createPair(address tokenA, address tokenB) external returns (address pair) {
-        require(tokenA != tokenB, 'Apple: IDENTICAL_ADDRESSES');
+        require(tokenA != tokenB, 'Denver: IDENTICAL_ADDRESSES');
         (address token0, address token1) = tokenA < tokenB ? (tokenA, tokenB) : (tokenB, tokenA);
-        require(token0 != address(0), 'Apple: ZERO_ADDRESS');
-        require(getPair[token0][token1] == address(0), 'Apple: PAIR_EXISTS'); // single check is sufficient
-        bytes memory bytecode = type(ApplePair).creationCode;
+        require(token0 != address(0), 'Denver: ZERO_ADDRESS');
+        require(getPair[token0][token1] == address(0), 'Denver: PAIR_EXISTS'); // single check is sufficient
+        bytes memory bytecode = type(DenverPair).creationCode;
         bytes32 salt = keccak256(abi.encodePacked(token0, token1));
         assembly {
             pair := create2(0, add(bytecode, 32), mload(bytecode), salt)
         }
-        IApplePair(pair).initialize(token0, token1);
+        IDenverPair(pair).initialize(token0, token1);
         getPair[token0][token1] = pair;
         getPair[token1][token0] = pair; // populate mapping in the reverse direction
         allPairs.push(pair);
@@ -40,12 +40,12 @@ contract AppleFactory is IAppleFactory {
     }
 
     function setFeeTo(address _feeTo) external {
-        require(msg.sender == feeToSetter, 'Apple: FORBIDDEN');
+        require(msg.sender == feeToSetter, 'Denver: FORBIDDEN');
         feeTo = _feeTo;
     }
 
     function setFeeToSetter(address _feeToSetter) external {
-        require(msg.sender == feeToSetter, 'Apple: FORBIDDEN');
+        require(msg.sender == feeToSetter, 'Denver: FORBIDDEN');
         feeToSetter = _feeToSetter;
     }
 }
